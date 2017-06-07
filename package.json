@@ -1,0 +1,21 @@
+{
+  "name": "AFrame-Slideshow",
+  "version": "1.0.0",
+  "description": "A component to place 3D frames in the scene and navigate through them",
+  "main": "server.js",
+  "devDependencies": {
+    "browserify"   : "~14.3.0",
+    "watchify"     : "^3.7.0",
+    "concurrently" : "^3.1.0",
+    "http-server"  : "^0.10.0"
+  },
+  "scripts": {
+    "dev"   : "concurrently \"http-server . -p 3000 -s\" \"watchify client/js/main.js -o public/js/script.js -v\" ",
+    "watch" : "watchify client/js/main.js -o public/js/script.js -v"
+  },
+  "author"       : "",
+  "license"      : "Apache 2.0",
+  "dependencies" : {
+    "express" : "^4.13.4"
+  }
+}

@@ -27,21 +27,10 @@
   <script src="public/js/script.js"></script>
 </head>
 <body>
-  <!-- MENUBAR -->
-  <header class="header">
-    <h1 class="header__title">A-Frame Slideshow</h1>
-    <button id="butQRCode" class="butQRCode headerButton" title="Get page QR code"></button>
-  </header>
-
   <!-- CONTENT CONTAINERS -->
 
   <div id="loaderDiv" class="dialog-container make-container--visible">
     <img class="loader" src="public/assets/icons/loader.gif" />
-  </div>
-
-  <div id="qrCodeDiv" class="dialog-container">
-    <span id="closeQRCode" class="small close rounded heavy"></span>
-    <div id="qrcode"></div>
   </div>
 
   <!-- A-FRAME ELEMENTS -->
@@ -55,7 +44,7 @@
 
     <a-entity aframe-slideshow="startpos : 0 0 0">
       <a-entity id="slide01" aframe-slideshow-slide="src: public/assets/slides/01.png; type: image"></a-entity>
-      <a-entity id="slide02" aframe-slideshow-slide="src: public/assets/slides/02.png; type: image"></a-entity>
+      <a-entity id="slide02" aframe-slideshow-slide="src: public/assets/slides/02.png; type: image;animTransition : true;"></a-entity>
       <a-entity id="slide03" aframe-slideshow-slide="src: public/assets/slides/03.mp4; type: video"></a-entity>
     </a-entity>
 
@@ -64,10 +53,5 @@
     
     <a-sky color="#3f51b5"></a-sky>
   </a-scene>
-
-  <!-- SCRIPTS -->
-
-  <script src="public/js/qrcode.js"></script>
-  <script src="public/js/ui-script.js"></script>
 </body>
 </html>

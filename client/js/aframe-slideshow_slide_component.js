@@ -15,7 +15,7 @@
      * @return {[type]} [description]
      */
     init: function () {
-      console.log("[AFRAME-Slideshow-Slide Component] Component initialized", this.data.src);
+      // console.log("[AFRAME-Slideshow-Slide Component] Component initialized", this.data.src);
       this.assetId = this.data.type + "_" + this.el.id;
 
       let assetFile;
@@ -42,25 +42,18 @@
 
     },
     createBox : function(){
-      let asset = document.getElementById(this.assetId);
-      this.width = (asset.width || 1920), this.height = (asset.height || 1080);
-      this.geomWidth = 2 * (this.width/this.height);
-      let index = Array.from(this.el.parentEl.children).indexOf(this.el);
+      let asset       = document.getElementById(this.assetId);
+      this.width      = (asset.width || 1920), this.height = (asset.height || 1080);
+      this.geomHeight = 2;
+      this.geomWidth  = this.geomHeight * (this.width/this.height);
 
       var box = document.createElement('a-box');
-
-      var x = index % 5;
-      var y = document.querySelector("a-scene").camera.el.object3D.position.y;
-      var z = -Math.floor(index / 5);
-      var p = new THREE.Vector3(x, 0, z).multiplyScalar(10);
-      p.y = y;
-      this.el.setAttribute('position', p);
 
       // box.setAttribute('scale', new THREE.Vector3(3, 3, 0.2).multiplyScalar(0.5));
       box.setAttribute('draw', 'width: '+this.width+'; height: '+this.height+'');
       box.setAttribute('material', 'shader: flat; src: #'+this.assetId);
       box.setAttribute("depth", 0.05);
-      box.setAttribute("height", 2);
+      box.setAttribute("height", this.geomHeight);
       box.setAttribute("width", this.geomWidth);
       this.el.appendChild(box);
 

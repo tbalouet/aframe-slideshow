@@ -3,7 +3,11 @@
   "use strict";
 
   AFRAME.registerComponent('aframe-slideshow', {
-    schema: {},
+    schema: {
+      transitionHeight : {type: 'number', default: '2'},
+      stepTransition   : {type: 'number', default: '0.01'},
+      startpos         : {type: 'vec3',   default: {x: 0, y: 0, z: 0}},
+    },
     /**
      * Set if component needs multiple instancing.
      */
@@ -13,12 +17,26 @@
      * @return {[type]} [description]
      */
     init: function () {
-      var that = this;
-      console.log("[AFRAME-Slideshow Component] Component initialized");
-      this.nbChildren = this.el.children.length;
+      var that                = this;
+      // console.log("[AFRAME-Slideshow Component] Component initialized");
+      this.nbChildren         = this.el.children.length;
       this.registeredChildren = 0;
-      this.currentIndex = 0;
+      this.currentIndex       = 0;
+      
+      this.cameraPath         = undefined;
+      this.transitionHeight   = this.data.transitionHeight;
+      this.deltaTransition    = 1;
+      this.stepTransition     = this.data.stepTransition;
 
+      if(!document.querySelector("a-assets")){
+        let assets = document.createElement("a-assets");
+        document.querySelector("a-scene").appendChild(assets);
+      }
+
+      this.addListeners();
+    },
+    addListeners: function(){
+      var that = this;
       document.addEventListener("keydown", function(event) {
         let catched = false;
         if(event.keyCode === 39){
@@ -36,12 +54,7 @@
         }
       });
 
-      if(!document.querySelector("a-assets")){
-        let assets = document.createElement("a-assets");
-        document.querySelector("a-scene").appendChild(assets);
-      }
-
-      window.addEventListener("resize", () => {this.goToSlide(this.currentIndex);});
+      window.addEventListener("resize", () => {this.goToSlide(this.currentIndex, true);});
 
       if(document.querySelector("#controllerRight")){
         document.querySelector("#controllerRight").addEventListener("buttondown", (event) => {
@@ -65,11 +78,16 @@
       }
     },
     addChild: function(child){
-      console.log("[AFRAME-Slideshow Component] Child added", child);
+      let index = Array.from(this.el.children).indexOf(child.el);
+      var x = index % 5;
+      var y = document.querySelector("a-scene").camera.el.object3D.position.y;
+      var z = -Math.floor(index / 5);
+      var p = new THREE.Vector3(x, 0, z).multiplyScalar(10).add(this.data.startpos);
+      p.y = y;
+      child.el.setAttribute('position', p);
 
       if(++this.registeredChildren >= this.nbChildren){
-        console.log("All children are home");
-        this.goToSlide(this.currentIndex);
+        this.goToSlide(this.currentIndex, true);
       }
     },
     nextSlide : function(){
@@ -82,20 +100,37 @@
       this.goToSlide(nextIndex);
       this.currentIndex = nextIndex;
     },
-    goToSlide : function(index){
+    goToSlide : function(index, skipAnimation){
       let slideChild = this.el.children[index];
       if(!slideChild){
         return;
       }
       let camera     = document.querySelector("a-scene").camera,
+        camParent    = document.querySelector("#camParent").object3D,
         renderer     = document.querySelector("a-scene").renderer,
         userHeight   = camera.el.components["camera"].data.userHeight,
-        geomWidth    = document.querySelector("#" + slideChild.id).components["aframe-slideshow-slide"].geomWidth,
+        geomSize     = document.querySelector("#" + slideChild.id).components["aframe-slideshow-slide"].geomWidth,
         camFov       = camera.fov,
-        canvasRatio  = renderer.getSize().width / renderer.getSize().height,
-        posZ         = ((geomWidth) / 2)/(Math.tan((camFov * Math.PI / 180) / 2)) / canvasRatio;
+        canvasRatio  = renderer.getSize().width / renderer.getSize().height;
+      if(canvasRatio > 1.7){
+        //Trick for fullscreen
+        canvasRatio = 0.95;
+        geomSize    = document.querySelector("#" + slideChild.id).components["aframe-slideshow-slide"].geomHeight;
+      }
+      let posZ         = ((geomSize) / 2)/(Math.tan((camFov * Math.PI / 180) / 2)) / canvasRatio;
 
-      document.querySelector("#camParent").object3D.position.set(slideChild.object3D.position.x, slideChild.object3D.position.y - userHeight, slideChild.object3D.position.z + posZ);
+      let newPos = new THREE.Vector3(slideChild.object3D.position.x, slideChild.object3D.position.y - userHeight, slideChild.object3D.position.z + posZ);
+      if(slideChild.components["aframe-slideshow-slide"].data.animTransition && !skipAnimation){
+        let pointArray = [];
+        pointArray.push(camParent.position.clone());
+        pointArray.push(newPos.clone().sub(camParent.position).divideScalar(2).add(camParent.position).add(new THREE.Vector3(0, this.transitionHeight, 0)));
+        pointArray.push(newPos.clone())
+        this.cameraPath = new THREE.CatmullRomCurve3(pointArray);
+        this.deltaTransition = 0;
+      }
+      else{
+        camParent.position.copy(newPos);
+      }
     },
     /**
      * Handle updates on the component data 
@@ -112,6 +147,14 @@
      * @return {[type]}           [description]
      */
     tick: function (time, timeDelta) {
+      if(this.deltaTransition < 1){
+        let camParent = document.querySelector("#camParent").object3D;
+        camParent.position.copy(this.cameraPath.getPointAt(this.deltaTransition));
+        this.deltaTransition += this.stepTransition * (1000/60/timeDelta);
+        if(this.deltaTransition > 1){
+          camParent.position.copy(this.cameraPath.getPointAt(1));
+        }
+      }
     },
     /**
      * Called when entity pauses.
@@ -154,7 +197,7 @@
      * @return {[type]} [description]
      */
     init: function () {
-      console.log("[AFRAME-Slideshow-Slide Component] Component initialized", this.data.src);
+      // console.log("[AFRAME-Slideshow-Slide Component] Component initialized", this.data.src);
       this.assetId = this.data.type + "_" + this.el.id;
 
       let assetFile;
@@ -181,25 +224,18 @@
 
     },
     createBox : function(){
-      let asset = document.getElementById(this.assetId);
-      this.width = (asset.width || 1920), this.height = (asset.height || 1080);
-      this.geomWidth = 2 * (this.width/this.height);
-      let index = Array.from(this.el.parentEl.children).indexOf(this.el);
+      let asset       = document.getElementById(this.assetId);
+      this.width      = (asset.width || 1920), this.height = (asset.height || 1080);
+      this.geomHeight = 2;
+      this.geomWidth  = this.geomHeight * (this.width/this.height);
 
       var box = document.createElement('a-box');
-
-      var x = index % 5;
-      var y = document.querySelector("a-scene").camera.el.object3D.position.y;
-      var z = -Math.floor(index / 5);
-      var p = new THREE.Vector3(x, 0, z).multiplyScalar(10);
-      p.y = y;
-      this.el.setAttribute('position', p);
 
       // box.setAttribute('scale', new THREE.Vector3(3, 3, 0.2).multiplyScalar(0.5));
       box.setAttribute('draw', 'width: '+this.width+'; height: '+this.height+'');
       box.setAttribute('material', 'shader: flat; src: #'+this.assetId);
       box.setAttribute("depth", 0.05);
-      box.setAttribute("height", 2);
+      box.setAttribute("height", this.geomHeight);
       box.setAttribute("width", this.geomWidth);
       this.el.appendChild(box);
 

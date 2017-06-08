@@ -20,24 +20,45 @@
       this.currentIndex = 0;
 
       document.addEventListener("keydown", function(event) {
-        event.stopPropagation();
+        let catched = false;
         if(event.keyCode === 39){
-          let nextIndex = (that.currentIndex + 1) % that.registeredChildren;
-          that.goToSlide(nextIndex);
-          that.currentIndex = nextIndex;
+          that.nextSlide();
+          catched = true;
         }
         else if(event.keyCode === 37){
-          let nextIndex = Math.max(that.currentIndex - 1, 0);
-          that.goToSlide(nextIndex);
-          that.currentIndex = nextIndex;
+          that.prevSlide();
+          catched = true;
         }
-        event.preventDefault();
+
+        if(catched){
+          event.stopPropagation();
+          event.preventDefault();
+        }
       });
 
       if(!document.querySelector("a-assets")){
         let assets = document.createElement("a-assets");
         document.querySelector("a-scene").appendChild(assets);
       }
+
+      window.addEventListener("resize", () => {this.goToSlide(this.currentIndex);});
+
+      document.querySelector("#controllerRight").addEventListener("buttondown", (event) => {
+        if(event.detail.id === 1){
+          that.nextSlide();
+        }
+        else if(event.detail.id === 2){
+          that.prevSlide();
+        }
+      });
+      document.querySelector("#controllerLeft").addEventListener("buttondown", (event) => {
+        if(event.detail.id === 1){
+          that.nextSlide();
+        }
+        else if(event.detail.id === 2){
+          that.prevSlide();
+        }
+      });
     },
     addChild: function(child){
       console.log("[AFRAME-Slideshow Component] Child added", child);
@@ -47,12 +68,30 @@
         this.goToSlide(this.currentIndex);
       }
     },
+    nextSlide : function(){
+      let nextIndex = (this.currentIndex + 1) % this.registeredChildren;
+      this.goToSlide(nextIndex);
+      this.currentIndex = nextIndex;
+    },
+    prevSlide : function(){
+      let nextIndex = Math.max(this.currentIndex - 1, 0);
+      this.goToSlide(nextIndex);
+      this.currentIndex = nextIndex;
+    },
     goToSlide : function(index){
       let slideChild = this.el.children[index];
       if(!slideChild){
         return;
       }
-      document.querySelector("a-scene").camera.position.set(slideChild.object3D.position.x, slideChild.object3D.position.y - 1, slideChild.object3D.position.z + 3);
+      let camera     = document.querySelector("a-scene").camera,
+        renderer     = document.querySelector("a-scene").renderer,
+        userHeight   = camera.el.components["camera"].data.userHeight,
+        geomWidth    = document.querySelector("#" + slideChild.id).components["aframe-slideshow-slide"].geomWidth,
+        camFov       = camera.fov,
+        canvasRatio  = renderer.getSize().width / renderer.getSize().height,
+        posZ         = ((geomWidth) / 2)/(Math.tan((camFov * Math.PI / 180) / 2)) / canvasRatio;
+
+      document.querySelector("#camParent").object3D.position.set(slideChild.object3D.position.x, slideChild.object3D.position.y - userHeight, slideChild.object3D.position.z + posZ);
     },
     /**
      * Handle updates on the component data 
@@ -131,6 +170,7 @@
         assetFile.setAttribute("autoplay", "autoplay");
         assetFile.setAttribute("loop", true);
         assetFile.setAttribute("muted", "true");
+        assetFile.muted = true;
         document.querySelector("a-assets").appendChild(assetFile);
         this.createBox();
       }
@@ -138,22 +178,25 @@
     },
     createBox : function(){
       let asset = document.getElementById(this.assetId);
-      let width = (asset.width || 1920), height = (asset.height || 1080);
+      this.width = (asset.width || 1920), this.height = (asset.height || 1080);
+      this.geomWidth = 2 * (this.width/this.height);
       let index = Array.from(this.el.parentEl.children).indexOf(this.el);
 
       var box = document.createElement('a-box');
 
       var x = index % 5;
+      var y = document.querySelector("a-scene").camera.el.object3D.position.y;
       var z = -Math.floor(index / 5);
       var p = new THREE.Vector3(x, 0, z).multiplyScalar(10);
+      p.y = y;
       this.el.setAttribute('position', p);
 
-      box.setAttribute('scale', new THREE.Vector3(3, 3, 0.2).multiplyScalar(0.5));
-      box.setAttribute('draw', 'width: '+width+'; height: '+height+'');
+      // box.setAttribute('scale', new THREE.Vector3(3, 3, 0.2).multiplyScalar(0.5));
+      box.setAttribute('draw', 'width: '+this.width+'; height: '+this.height+'');
       box.setAttribute('material', 'shader: flat; src: #'+this.assetId);
-      box.setAttribute("depth", 0.5);
+      box.setAttribute("depth", 0.05);
       box.setAttribute("height", 2);
-      box.setAttribute("width", 2 * (width/height));
+      box.setAttribute("width", this.geomWidth);
       this.el.appendChild(box);
 
       this.el.parentEl.components['aframe-slideshow'].addChild(this);

@@ -13,17 +13,21 @@
 
     function populateSlideshow(){
       var slideshow = document.querySelector("[aframe-slideshow]");
-      let NB_SLIDES = 7;
+      let NB_SLIDES = 37;
 
-      var slidesVideo = [3, 4]
+      var slidesVideo = [3, 4, 20, 26, 28];
       // to be generated fom the list of slides
       for(let i = 1, len = NB_SLIDES; i <= len; ++i){
         var entity = document.createElement("a-entity");
         entity.id = "slide"+i;
+        let animate = "";
+        if(i === 20 || i === 21){
+          animate = "animTransition: true;";
+        }
         if (slidesVideo.indexOf(i) === -1)
-          entity.setAttribute("aframe-slideshow-slide", "src: public/assets/slides/Slide ("+i+").png; type: image;");
+          entity.setAttribute("aframe-slideshow-slide", "src: public/assets/slides/Slide ("+i+").png; type: image;" + animate);
         else
-          entity.setAttribute("aframe-slideshow-slide", "src: public/assets/slides/Slide ("+i+").mp4; type: video;");
+          entity.setAttribute("aframe-slideshow-slide", "src: public/assets/slides/Slide ("+i+").mp4; type: video;" + animate);
         slideshow.appendChild(entity);
       }
     }

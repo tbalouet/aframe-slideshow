@@ -21,6 +21,8 @@
       this.nbChildren         = this.el.children.length;
       this.registeredChildren = 0;
       this.currentIndex       = 0;
+
+      this.oldCamParentPos    = new THREE.Vector3();
       
       this.cameraPath         = undefined;
       this.transitionHeight   = this.data.transitionHeight;
@@ -55,8 +57,11 @@
 
       window.addEventListener("resize", () => {this.goToSlide(this.currentIndex, true);});
 
-      if(document.querySelector("#controllerRight")){
-        document.querySelector("#controllerRight").addEventListener("buttondown", (event) => {
+      if(document.querySelector("#right-hand")){
+        document.querySelector("#right-hand").addEventListener("buttondown", (event) => {
+          if(document.querySelector("a-scene").is('vr-mode')){
+            return;
+          }
           if(event.detail.id === 1){
             that.nextSlide();
           }
@@ -65,8 +70,11 @@
           }
         });
       }
-      if(document.querySelector("#controllerLeft")){
-        document.querySelector("#controllerLeft").addEventListener("buttondown", (event) => {
+      if(document.querySelector("#left-hand")){
+        document.querySelector("#left-hand").addEventListener("buttondown", (event) => {
+          if(document.querySelector("a-scene").is('vr-mode')){
+            return;
+          }
           if(event.detail.id === 1){
             that.nextSlide();
           }
@@ -75,14 +83,23 @@
           }
         });
       }
+
+
+      document.querySelector('a-scene').addEventListener('exit-vr', function () {
+        document.querySelector("#camParent").object3D.position.copy(that.oldCamParentPos);
+      })
+      document.querySelector('a-scene').addEventListener('enter-vr', function () {
+        that.oldCamParentPos.copy(document.querySelector("#camParent").object3D.position);
+        document.querySelector("#camParent").object3D.position.set(0, 0, 0);
+      })
     },
     addChild: function(child){
       let index = Array.from(this.el.children).indexOf(child.el);
       var x = index % 5;
       var y = document.querySelector("a-scene").camera.el.object3D.position.y;
       var z = -Math.floor(index / 5);
-      var p = new THREE.Vector3(x, 0, z).multiplyScalar(10).add(this.data.startpos);
-      p.y = y;
+      var p = new THREE.Vector3(x, 0, z).multiplyScalar(5).add(this.data.startpos);
+      p.y = 1.6;
       child.el.setAttribute('position', p);
 
       if(++this.registeredChildren >= this.nbChildren){
@@ -111,14 +128,14 @@
         geomSize     = document.querySelector("#" + slideChild.id).components["aframe-slideshow-slide"].geomWidth,
         camFov       = camera.fov,
         canvasRatio  = renderer.getSize().width / renderer.getSize().height;
-      if(canvasRatio > 1.7){
-        //Trick for fullscreen
-        canvasRatio = 0.95;
-        geomSize    = document.querySelector("#" + slideChild.id).components["aframe-slideshow-slide"].geomHeight;
-      }
+      // if(canvasRatio > 1.9){
+      //   //Trick for fullscreen
+      //   canvasRatio = 1;
+      //   geomSize    = document.querySelector("#" + slideChild.id).components["aframe-slideshow-slide"].geomHeight;
+      // }
       let posZ         = ((geomSize) / 2)/(Math.tan((camFov * Math.PI / 180) / 2)) / canvasRatio;
 
-      let newPos = new THREE.Vector3(slideChild.object3D.position.x, slideChild.object3D.position.y - userHeight, slideChild.object3D.position.z + posZ);
+      let newPos = new THREE.Vector3(slideChild.object3D.position.x, 0, slideChild.object3D.position.z + posZ);
       if(slideChild.components["aframe-slideshow-slide"].data.animTransition && !skipAnimation){
         let pointArray = [];
         pointArray.push(camParent.position.clone());

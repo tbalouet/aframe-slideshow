@@ -5,29 +5,45 @@ http://vatelier.net:3000/apainter.html?url=http://vatelier.net/MyDemo/apainter-a
 -->
 <html>
 <head>
-<meta charset="utf-8">
-<title>A-Painter</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="img/icon-256.png">
-<meta name="description" content="Paint in VR in your browser. Powered by A-Frame.">
-<script>
-      UPLOADCARE_LOCALE = 'en';
-      UPLOADCARE_PUBLIC_KEY = 'eb0df3191b88f403ad76';
-    </script>
-<script src="public/js/aframe.js"></script>
-<script src="public/js/aframe-extras.min.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<script src="https://ucarecdn.com/widget/2.5.5/uploadcare/uploadcare.full.min.js"></script>
-<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.12/dist/clipboard.min.js"></script>
-<script src="https://aframe.io/a-painter/build.js"></script>
-<script src="https://aframe.io/a-painter/vendor/aframe-teleport-controls.min.js"></script>
-<script src="https://aframe.io/a-painter/vendor/aframe-tooltip-component.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A-Frame Slideshow</title>
+  <link rel="stylesheet" type="text/css" href="public/styles/inline.css">
 
-<script src="public/js/script.js"></script>
+  <link rel="manifest" href="manifest.json">
 
-<link rel="stylesheet" href="https://aframe.io/a-painter/css/main.css">
-<link rel="icon" type="image/png" href="https://aframe.io/a-painter/favicon-32x32.png" sizes="32x32"/>
-<link rel="icon" type="image/png" href="https://aframe.io/a-painter/favicon-16x16.png" sizes="16x16"/>
+  <link rel="icon" type="image/ico" href="public/assets/icons/favicon.ico"/>
+
+  <!-- Add to home screen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="A-Frame Slideshow">
+  <link rel="apple-touch-icon" href="public/assets/icons/icon-128x128.png">
+  
+  <meta name="msapplication-TileImage" content="public/assets/icons/icon-128x128.png">
+  <meta name="msapplication-TileColor" content="#2F3BA2"> 
+  <script>
+    UPLOADCARE_LOCALE = 'en';
+    UPLOADCARE_PUBLIC_KEY = 'eb0df3191b88f403ad76';
+  </script>
+
+  <script src="public/js/aframe-master-painter.js"></script>
+  <script type="text/javascript" src="public/js/aframe-gamepad-controls.js"></script>
+  <!--<script src="public/js/aframe-extras.min.js"></script>-->
+
+  <script src="https://ucarecdn.com/widget/2.5.5/uploadcare/uploadcare.full.min.js"></script>
+  <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.12/dist/clipboard.min.js"></script>
+  <script src="https://aframe.io/a-painter/build.js"></script>
+  <script src="https://aframe.io/a-painter/vendor/aframe-teleport-controls.min.js"></script>
+  <script src="https://aframe.io/a-painter/vendor/aframe-tooltip-component.min.js"></script>
+
+  <script src="public/js/script.js"></script>
+
+  <link rel="stylesheet" href="https://aframe.io/a-painter/css/main.css">
+  <link rel="icon" type="image/png" href="https://aframe.io/a-painter/favicon-32x32.png" sizes="32x32"/>
+  <link rel="icon" type="image/png" href="https://aframe.io/a-painter/favicon-16x16.png" sizes="16x16"/>
 </head>
 <body style="background-color: #030404">
   <div id="loaderDiv" class="dialog-container make-container--visible"></div>
@@ -102,20 +118,17 @@ http://vatelier.net:3000/apainter.html?url=http://vatelier.net/MyDemo/apainter-a
       </a-entity>
     </a-entity>
     <a-entity id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:90" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
-    <a-entity id="acamera" camera look-controls-alt orbit-controls></a-entity>
+    
+    <a-entity id="camParent" position="0 0 0">
+      <a-entity id="acamera" camera look-controls-alt orbit-controls></a-entity>
+    </a-entity>
 
     <!-- slidshow content -->
-    <a-entity id="camParent" position="0 0 0">
-      <a-entity id="mainCam" camera="userHeight: 1.6" look-controls></a-entity>
-    </a-entity>
-    <a-entity scale="0.3 0.3 0.3" position="-1 0.5 0" animation-mixer="" json-model="src: public/assets/models/utopiah_danse.json;" 
-      gamepad-controls="lookEnabled: false;controller: 1;" rotation="" visible=""></a-entity>
+    <!-- <a-entity scale="0.3 0.3 0.3" position="-1 0.5 0" animation-mixer="" json-model="src: public/assets/models/utopiah_danse.json;" 
+      gamepad-controls="lookEnabled: false;controller: 0;" rotation="" visible=""></a-entity>-->
 
-    <a-entity aframe-slideshow="startpos : 0 0 0"></a-entity>
+    <a-entity aframe-slideshow="startpos : 5 0 -5"></a-entity>
 
-    <a-entity id="controllerLeft" oculus-touch-controls="hand: left"></a-entity>
-    <a-entity id="controllerRight" oculus-touch-controls="hand: right"></a-entity>
-    <!-- could use elements with IDs left-hand and right-hand instead and avoid visual duplicates -->
     <!-- end of slidshow content -->
   </a-scene>
 

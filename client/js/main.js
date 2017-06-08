@@ -26,33 +26,7 @@
           entity.setAttribute("aframe-slideshow-slide", "src: public/assets/slides/Slide ("+i+").mp4; type: video;");
         slideshow.appendChild(entity);
       }
-
-      slideCamera()
-      // now that all slides are loaded we switch the camera
     }
-
-    // specific to apainter
-    function slideCamera(){
-      // move from the apainter camera to the slideshow camera
-      document.querySelector("#acamera").classList.remove('active-camera')
-      document.querySelector("#acamera").setAttribute('camera', 'active', false)
-      document.querySelector("#mainCam").setAttribute('camera', 'active', true)
-      document.querySelector("#mainCam").classList.add('active-camera')
-    }
-    function paintCamera(){
-      // move from the slideshow camera to the apainter camera
-      document.querySelector("#mainCam").classList.remove('active-camera')
-      document.querySelector("#mainCam").setAttribute('camera', 'active', false)
-      document.querySelector("#acamera").setAttribute('camera', 'active', true)
-      document.querySelector("#acamera").classList.add('active-camera')
-    }
-    document.querySelector('#apainter-logo').style.visibility = "hidden"
-    document.querySelector('a-scene').addEventListener('exit-vr', function () {
-      slideCamera()
-    })
-    document.querySelector('a-scene').addEventListener('enter-vr', function () {
-      paintCamera()
-    })
 
     console.log("[WARNING] Service Worker is disabled!");
     //Launch a Service Worker (if possible) for Offline handling

@@ -42,22 +42,26 @@
 
       window.addEventListener("resize", () => {this.goToSlide(this.currentIndex);});
 
-      document.querySelector("#controllerRight").addEventListener("buttondown", (event) => {
-        if(event.detail.id === 1){
-          that.nextSlide();
-        }
-        else if(event.detail.id === 2){
-          that.prevSlide();
-        }
-      });
-      document.querySelector("#controllerLeft").addEventListener("buttondown", (event) => {
-        if(event.detail.id === 1){
-          that.nextSlide();
-        }
-        else if(event.detail.id === 2){
-          that.prevSlide();
-        }
-      });
+      if(document.querySelector("#controllerRight")){
+        document.querySelector("#controllerRight").addEventListener("buttondown", (event) => {
+          if(event.detail.id === 1){
+            that.nextSlide();
+          }
+          else if(event.detail.id === 2){
+            that.prevSlide();
+          }
+        });
+      }
+      if(document.querySelector("#controllerLeft")){
+        document.querySelector("#controllerLeft").addEventListener("buttondown", (event) => {
+          if(event.detail.id === 1){
+            that.nextSlide();
+          }
+          else if(event.detail.id === 2){
+            that.prevSlide();
+          }
+        });
+      }
     },
     addChild: function(child){
       console.log("[AFRAME-Slideshow Component] Child added", child);

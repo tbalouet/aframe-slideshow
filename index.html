@@ -22,7 +22,8 @@
   <meta name="msapplication-TileColor" content="#2F3BA2">  
   
   <script src="public/js/aframe.js"></script>
-  <script type="text/javascript" src="public/js/aframe-gamepad-controls.js"></script>
+  <script src="public/js/aframe-gamepad-controls.js"></script>
+  <script src="public/js/aframe-extras.min.js"></script>
   <script src="public/js/script.js"></script>
 </head>
 <body>
@@ -47,9 +48,11 @@
 
   <a-scene fog="color: #bc483e; near: 0; far: 65;">
     <a-entity id="camParent" position="0 0 0">
-      <a-entity id="mainCam" camera="userHeight: 1.6" look-controls gamepad-controls></a-entity>
+      <a-entity id="mainCam" camera="userHeight: 1.6" look-controls></a-entity>
     </a-entity>
-    <a-box position="-1 0.5 0" rotation="0 45 0" color="#4CC3D9" gamepad-controls="lookEnabled: false"></a-box>
+    <a-entity scale="0.3 0.3 0.3" position="-1 0.5 0" animation-mixer="" json-model="src: public/assets/models/utopiah_danse.json;" 
+      gamepad-controls="lookEnabled: false;controller: 1;" rotation="" visible=""></a-entity>
+
     <a-entity aframe-slideshow="startpos : 0 0 0">
       <a-entity id="slide01" aframe-slideshow-slide="src: public/assets/slides/01.png; type: image"></a-entity>
       <a-entity id="slide02" aframe-slideshow-slide="src: public/assets/slides/02.png; type: image"></a-entity>

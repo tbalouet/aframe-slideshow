@@ -166,7 +166,7 @@
       if(this.deltaTransition < 1){
         let camParent = document.querySelector("#camParent").object3D;
         camParent.position.copy(this.cameraPath.getPointAt(this.deltaTransition));
-        this.deltaTransition += this.stepTransition * (1000/60/timeDelta);
+        this.deltaTransition += this.stepTransition;// * (1000/60/timeDelta);
         if(this.deltaTransition > 1){
           camParent.position.copy(this.cameraPath.getPointAt(1));
         }

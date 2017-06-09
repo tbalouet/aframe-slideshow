@@ -31,19 +31,19 @@ http://vatelier.net:3000/apainter.html?url=http://vatelier.net/MyDemo/apainter-a
 
   <script src="public/js/aframe-master-painter.js"></script>
   <script type="text/javascript" src="public/js/aframe-gamepad-controls.js"></script>
-  <!--<script src="public/js/aframe-extras.min.js"></script>-->
+  <script src="public/js/aframe-extras.min.js"></script>
 
-  <script src="https://ucarecdn.com/widget/2.5.5/uploadcare/uploadcare.full.min.js"></script>
-  <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.12/dist/clipboard.min.js"></script>
-  <script src="https://aframe.io/a-painter/build.js"></script>
-  <script src="https://aframe.io/a-painter/vendor/aframe-teleport-controls.min.js"></script>
-  <script src="https://aframe.io/a-painter/vendor/aframe-tooltip-component.min.js"></script>
+  <script src="public/js/uploadcare.full.min.js"></script>
+  <script src="public/js/clipboard.min.js"></script>
+  <script src="public/js/apainter.js"></script>
+  <script src="public/js/aframe-teleport-controls.min.js"></script>
+  <script src="public/js/aframe-tooltip-component.min.js"></script>
 
   <script src="public/js/script.js"></script>
 
-  <link rel="stylesheet" href="https://aframe.io/a-painter/css/main.css">
-  <link rel="icon" type="image/png" href="https://aframe.io/a-painter/favicon-32x32.png" sizes="32x32"/>
-  <link rel="icon" type="image/png" href="https://aframe.io/a-painter/favicon-16x16.png" sizes="16x16"/>
+  <link rel="stylesheet" href="public/styles/main.css">
+  <link rel="icon" type="image/png" href="public/assets/icons/favicon-32x32.png" sizes="32x32"/>
+  <link rel="icon" type="image/png" href="public/assets/icons/favicon-16x16.png" sizes="16x16"/>
 </head>
 <body style="background-color: #030404">
   <div id="loaderDiv" class="dialog-container make-container--visible"></div>
@@ -51,19 +51,16 @@ http://vatelier.net:3000/apainter.html?url=http://vatelier.net/MyDemo/apainter-a
 
   <a-scene>
     <a-assets>
-      <img id="skymap" src="https://aframe.io/a-painter/assets/images/sky.jpg" crossOrigin="anonymous">
-      <img id="uinormal" src="https://aframe.io/a-painter/assets/images/ui-normal.png" crossOrigin="anonymous">
-      <img id="floor" src="https://aframe.io/a-painter/assets/images/floor.jpg" crossOrigin="anonymous">
-      <a-asset-item id="logoobj" src="https://aframe.io/a-painter/assets/models/logo.obj"></a-asset-item>
-      <a-asset-item id="logomtl" src="https://aframe.io/a-painter/assets/models/logo.mtl"></a-asset-item>
-      <a-asset-item id="uiobj" src="https://aframe.io/a-painter/assets/models/ui.obj"></a-asset-item>
-      <a-asset-item id="hitEntityObj" src="https://aframe.io/a-painter/assets/models/teleportHitEntity.obj"></a-asset-item>
+      <img id="skymap" src="public/assets/images/sky.jpg" crossOrigin="anonymous">
+      <img id="uinormal" src="public/assets/images/ui-normal.png" crossOrigin="anonymous">
+      <img id="floor" src="public/assets/images/floor.jpg" crossOrigin="anonymous">
+      <a-asset-item id="uiobj" src="public/assets/models/ui.obj"></a-asset-item>
+      <a-asset-item id="hitEntityObj" src="public/assets/models/teleportHitEntity.obj"></a-asset-item>
     </a-assets>
 
     <a-light type="point" light="color: #fff; intensity:0.6" position="3 10 1"></a-light>
     <a-light type="point" light="color: #fff; intensity:0.2" position="-3 -10 0"></a-light>
     <a-light type="hemisphere" groundColor="#888" intensity="0.8"></a-light>
-    <a-entity id="logo" obj-model="obj: #logoobj; mtl: #logomtl"></a-entity>
      
     <a-entity id="hitEntityLeft" material="shader:flat; color: #ff3468" obj-model="obj: #hitEntityObj"></a-entity>
     <a-entity id="hitEntityRight" material="shader:flat; color: #ff3468" obj-model="obj: #hitEntityObj"></a-entity>
@@ -123,11 +120,9 @@ http://vatelier.net:3000/apainter.html?url=http://vatelier.net/MyDemo/apainter-a
       <a-entity id="acamera" camera look-controls-alt orbit-controls></a-entity>
     </a-entity>
 
-    <a-box position="-4.7 0.8 -7" gamepad-controls="lookEnabled: false;controller: 2;"></a-box>
-
     <!-- slidshow content -->
-    <!-- <a-entity scale="0.3 0.3 0.3" position="-1 0.5 0" animation-mixer="" json-model="src: public/assets/models/utopiah_danse.json;" 
-      gamepad-controls="lookEnabled: false;controller: 0;" rotation="" visible=""></a-entity>-->
+     <a-entity scale="0.2 0.2 0.2" position="-4.7 0.8 -7" animation-mixer="" json-model="src: public/assets/models/utopiah_danse.json;" 
+      gamepad-controls="lookEnabled: false;controller: 2;" rotation="" visible=""></a-entity>
 
     <a-entity aframe-slideshow="startpos : -10 0 15"></a-entity>
 

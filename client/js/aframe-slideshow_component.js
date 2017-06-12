@@ -3,9 +3,13 @@
 
   AFRAME.registerComponent('aframe-slideshow', {
     schema: {
-      transitionHeight : {type: 'number', default: '2'},
-      stepTransition   : {type: 'number', default: '0.01'},
-      startpos         : {type: 'vec3',   default: {x: 0, y: 0, z: 0}},
+      transitionHeight  : {type: 'number', default: '2'},
+      nbslides          : {type: 'number', default: '0'},
+      stepTransition    : {type: 'number', default: '0.01'},
+      startpos          : {type: 'vec3',   default: undefined},
+      distBetweenSlides : {type: 'number', default: '5'},
+      nbColumns         : {type: 'number', default: '5'},
+      slideYPos         : {type: 'number', default: '1.6'}
     },
     /**
      * Set if component needs multiple instancing.
@@ -18,9 +22,19 @@
     init: function () {
       var that                = this;
       // console.log("[AFRAME-Slideshow Component] Component initialized");
-      this.nbChildren         = this.el.children.length;
+      this.nbChildren         = parseInt(this.data.nbslides);
       this.registeredChildren = 0;
       this.currentIndex       = 0;
+
+      if(this.data.startpos){
+        this.startpos = this.data.startpos;
+      }
+      else{
+        this.startpos   = new THREE.Vector3();
+        this.startpos.x = -((this.data.nbColumns - 1) / 2) * this.data.distBetweenSlides;
+        this.startpos.y = this.data.slideYPos;
+        this.startpos.z = (((this.nbChildren / this.data.nbColumns) - 1) / 2) * this.data.distBetweenSlides;
+      }
 
       this.oldCamParentPos    = new THREE.Vector3();
       
@@ -35,6 +49,7 @@
       }
 
       this.addListeners();
+      this.initSlides();
     },
     addListeners: function(){
       var that = this;
@@ -84,7 +99,6 @@
         });
       }
 
-
       document.querySelector('a-scene').addEventListener('exit-vr', function () {
         document.querySelector("#camParent").object3D.position.copy(that.oldCamParentPos);
       })
@@ -93,18 +107,42 @@
         document.querySelector("#camParent").object3D.position.set(0, 0, 0);
       })
     },
+    initSlides: function(){
+      var slidesVideo = this.data.vidSlidesIndex.split(",").map(function(obj){ return parseInt(obj, 10);});
+      var slidesAnimated = this.data.animSlidesIndex.split(",").map(function(obj){ return parseInt(obj, 10);});
+      // to be generated fom the list of slides
+      for(let i = 1, len = this.data.nbslides; i <= len; ++i){
+        var entity = document.createElement("a-entity");
+        entity.id = "slide"+i;
+        let animate = "";
+        if (slidesAnimated.indexOf(i) !== -1){
+          animate = "animTransition: true;";
+        }
+        if (slidesVideo.indexOf(i) !== -1){
+          entity.setAttribute("aframe-slideshow-slide", "src: public/assets/slides/Slide_("+i+").mp4; type: video;" + animate);
+        }
+        else{
+          entity.setAttribute("aframe-slideshow-slide", "src: public/assets/slides/Slide_("+i+").png; type: image;" + animate);
+        }
+        this.el.appendChild(entity);
+      }
+    },
     addChild: function(child){
       let index = Array.from(this.el.children).indexOf(child.el);
-      var x = index % 5;
-      var y = document.querySelector("a-scene").camera.el.object3D.position.y;
-      var z = -Math.floor(index / 5);
-      var p = new THREE.Vector3(x, 0, z).multiplyScalar(5).add(this.data.startpos);
-      p.y = 1.6;
-      child.el.setAttribute('position', p);
+      let vec = new THREE.Vector3();
+      vec.x = (index % this.data.nbColumns);
+      vec.z = -Math.floor(index / this.data.nbColumns);
+      vec.multiplyScalar(this.data.distBetweenSlides).add(this.startpos);
+      vec.y = this.data.slideYPos;
+      child.el.setAttribute('position', vec);
 
       if(++this.registeredChildren >= this.nbChildren){
-        this.goToSlide(this.currentIndex, true);
+        this.onSlideshowReady();
       }
+    },
+    onSlideshowReady : function(){
+      document.getElementById("loaderDiv").classList.remove('make-container--visible');
+      this.goToSlide(this.currentIndex, true);
     },
     nextSlide : function(){
       let nextIndex = (this.currentIndex + 1) % this.registeredChildren;

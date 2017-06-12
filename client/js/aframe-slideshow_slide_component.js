@@ -43,14 +43,11 @@
     },
     createBox : function(){
       let asset       = document.getElementById(this.assetId);
-      this.width      = (asset.width || 1920), this.height = (asset.height || 1080);
+      this.width      = (asset.width || 1024), this.height = (asset.height || 512);
       this.geomHeight = 2;
       this.geomWidth  = this.geomHeight * (this.width/this.height);
 
       var box = document.createElement('a-box');
-
-      // box.setAttribute('scale', new THREE.Vector3(3, 3, 0.2).multiplyScalar(0.5));
-      box.setAttribute('draw', 'width: '+this.width+'; height: '+this.height+'');
       box.setAttribute('material', 'shader: flat; src: #'+this.assetId);
       box.setAttribute("depth", 0.05);
       box.setAttribute("height", this.geomHeight);

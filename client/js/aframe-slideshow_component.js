@@ -4,6 +4,7 @@
   AFRAME.registerComponent('aframe-slideshow', {
     schema: {
       transitionHeight  : {type: 'number', default: '2'},
+      folder            : {type: 'string', default: 'public/assets/slides/'},
       nbslides          : {type: 'number', default: '0'},
       stepTransition    : {type: 'number', default: '0.01'},
       startpos          : {type: 'vec3',   default: undefined},
@@ -119,10 +120,10 @@
           animate = "animTransition: true;";
         }
         if (slidesVideo.indexOf(i) !== -1){
-          entity.setAttribute("aframe-slideshow-slide", "src: public/assets/slides/Slide_("+i+").mp4; type: video;" + animate);
+          entity.setAttribute("aframe-slideshow-slide", "src: "+this.data.folder+"Slide_("+i+").mp4; type: video;" + animate);
         }
         else{
-          entity.setAttribute("aframe-slideshow-slide", "src: public/assets/slides/Slide_("+i+").png; type: image;" + animate);
+          entity.setAttribute("aframe-slideshow-slide", "src: "+this.data.folder+"Slide_("+i+").png; type: image;" + animate);
         }
         this.el.appendChild(entity);
       }

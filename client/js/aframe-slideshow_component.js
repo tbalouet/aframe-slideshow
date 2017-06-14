@@ -143,7 +143,21 @@
     },
     onSlideshowReady : function(){
       document.getElementById("loaderDiv").classList.remove('make-container--visible');
-      this.goToSlide(this.currentIndex, true);
+
+      try{
+        let parser  = document.createElement('a');
+        parser.href = location.href;
+        if(parser.hash !== "" && parser.hash.indexOf("#p") !== -1){
+          let index = parseInt(parser.hash.replace("#p", ""), 10);
+          this.currentIndex = (isNaN(index) ? this.currentIndex : index);
+        }
+      }
+      catch(err){
+        console.log("[AFRAME-SLIDESHOW Component] Error parsing url", err);
+      }
+      finally{
+        this.goToSlide(this.currentIndex, true);
+      }
     },
     nextSlide : function(){
       let nextIndex = (this.currentIndex + 1) % this.registeredChildren;

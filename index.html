@@ -4,152 +4,66 @@ e.g.
 http://vatelier.net:3000/apainter.html?url=http://vatelier.net/MyDemo/apainter-amaze2017/a-painter/demo.apa
 -->
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A-Frame Slideshow</title>
-  <link rel="stylesheet" type="text/css" href="public/styles/inline.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Frame Slideshow</title>
+    <link rel="stylesheet" type="text/css" href="public/styles/inline.css">
 
-  <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="manifest.json">
 
-  <link rel="icon" type="image/ico" href="public/assets/icons/favicon.ico"/>
+    <link rel="icon" type="image/ico" href="public/assets/icons/favicon.ico"/>
 
-  <!-- Add to home screen for Safari on iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="A-Frame Slideshow">
-  <link rel="apple-touch-icon" href="public/assets/icons/icon-128x128.png">
-  
-  <meta name="msapplication-TileImage" content="public/assets/icons/icon-128x128.png">
-  <meta name="msapplication-TileColor" content="#2F3BA2"> 
-
-  <!-- AFRAME HEADERS -->
-  <script>
-    UPLOADCARE_LOCALE = 'en';
-    UPLOADCARE_PUBLIC_KEY = 'eb0df3191b88f403ad76';
-  </script>
-
-  <script src="public/js/aframe-master-painter.js"></script>
-  <script type="text/javascript" src="public/js/aframe-gamepad-controls.js"></script>
-  <script src="public/js/aframe-extras.min.js"></script>
-
-  <script src="public/js/uploadcare.full.min.js"></script>
-  <script src="public/js/clipboard.min.js"></script>
-  <script src="public/js/apainter.js"></script>
-  <script src="public/js/aframe-teleport-controls.min.js"></script>
-  <script src="public/js/aframe-tooltip-component.min.js"></script>
-
-  <!-- /AFRAME HEADERS -->
-
-  <script src="public/js/script.js"></script>
-
-  <link rel="stylesheet" href="public/styles/main.css">
-</head>
-<body style="background-color: #030404">
-  <div id="loaderDiv" class="dialog-container make-container--visible">
-    <img class="loader" src="public/assets/icons/loader.gif" />
-  </div>
-
-  <a-scene>
-    <!-- A-FRAME SCENE ENTITIES -->
-    <a-assets>
-      <img id="skymap" src="public/assets/images/sky.jpg" crossOrigin="anonymous">
-      <img id="uinormal" src="public/assets/images/ui-normal.png" crossOrigin="anonymous">
-      <img id="floor" src="public/assets/images/floor.jpg" crossOrigin="anonymous">
-      <a-asset-item id="uiobj" src="public/assets/models/ui.obj"></a-asset-item>
-      <a-asset-item id="hitEntityObj" src="public/assets/models/teleportHitEntity.obj"></a-asset-item>
-    </a-assets>
-
-    <a-light type="point" light="color: #fff; intensity:0.6" position="3 10 1"></a-light>
-    <a-light type="point" light="color: #fff; intensity:0.2" position="-3 -10 0"></a-light>
-    <a-light type="hemisphere" groundColor="#888" intensity="0.8"></a-light>
-     
-    <a-entity id="hitEntityLeft" material="shader:flat; color: #ff3468" obj-model="obj: #hitEntityObj"></a-entity>
-    <a-entity id="hitEntityRight" material="shader:flat; color: #ff3468" obj-model="obj: #hitEntityObj"></a-entity>
-    <a-entity id="ground" geometry="primitive: box; width: 12; height: 0.01; depth: 12" material="shader: flat; src: #floor">
-    </a-entity>
-    <a-entity id="left-hand" brush if-no-vr-headset="visible: false" paint-controls="hand: left" teleport-controls="button: trackpad; ground: #ground; hitCylinderColor: #ff3468; curveHitColor: #ff3468; curveMissColor: #333333; curveLineWidth: 0.01; hitEntity: #hitEntityLeft" ui>
-      <a-entity class="vive-tooltips" visible="false">
-        <a-entity tooltip="text: Brush size\n(slide up/down); width: 0.1; height: 0.04; targetPosition: 0 0.016 0.0073; src: assets/images/tooltip.png" position="0.1 0.025 0.048" rotation="-90 0 0">
-        </a-entity>
-        <a-entity tooltip="text: Main menu; width: 0.07; height: 0.03; targetPosition: 0 -0.07 -0.062; lineHorizontalAlign: center; lineVerticalAlign: bottom; src: assets/images/tooltip.png" position="0 0.015 -0.05" rotation="-90 0 0">
-        </a-entity>
-        <a-entity tooltip="text: Press to paint\n(pressure sensitive); width: 0.11; height: 0.04; targetPosition: 0 -0.06 0.067; lineHorizontalAlign: right; src: assets/images/tooltip.png" position="-0.11 -0.055 0.04" rotation="-90 0 0">
-        </a-entity>
-        <a-entity tooltip="text: Undo; width: 0.06; height: 0.03; targetPosition: -0.003 0.046 0.106; src: assets/images/tooltip.png" position="0.1 -0.005 0.12" rotation="-90 0 0">
-        </a-entity>
-      </a-entity>
-      <a-entity class="oculus-tooltips" visible="false">
-        <a-entity tooltip="text: Main Menu; width: 0.07; height: 0.03; targetPosition: -0.009 0.0 -0.002; rotation: -90 0 0; src: assets/images/tooltip.png" position="0.066 0.013 0.013">
-        </a-entity>
-        <a-entity tooltip="text: Teleport; width: 0.06; height: 0.03; targetPosition: 0.008 0 -0.001; rotation: -90 0 0; src: assets/images/tooltip.png" position="0.059 0.015 -0.028">
-        </a-entity>
-        <a-entity tooltip="text: Brush size\n(slide up/down); width: 0.09; height: 0.04; targetPosition: -0.009 0.01 -0.01; lineHorizontalAlign: center; lineVerticalAlign: top; rotation: -90 0 0; src: assets/images/tooltip.png" position="-0.07 0.01 0.06">
-        </a-entity>
-        <a-entity tooltip="text: Press to paint!\n(pressure sensitive); width: 0.11; height: 0.04; targetPosition: 0.002 -0.023 -0.02; lineHorizontalAlign: right; rotation: -90 0 0; src: assets/images/tooltip.png" position="-0.09 0.020 -0.067">
-        </a-entity>
-        <a-entity tooltip="text: Undo; width: 0.05; height: 0.03; targetPosition: 0.005 -0.022 0.027; rotation: -90 0 0; src: assets/images/tooltip.png" position="0.058 -0.01 0.055">
-        </a-entity>
-      </a-entity>
-    </a-entity>
-    <a-entity id="right-hand" brush if-no-vr-headset="visible: false" paint-controls="hand: right" teleport-controls="button: trackpad; ground: #ground; hitCylinderColor: #ff3468; curveHitColor: #ff3468; curveMissColor: #333333; curveLineWidth: 0.01; hitEntity: #hitEntityRight" ui>
-      <a-entity class="vive-tooltips" visible="false">
-        <a-entity tooltip="text: Brush size\n(slide up/down); width: 0.1; height: 0.04; targetPosition: 0 0.016 0.0073; src: assets/images/tooltip.png" position="0.1 0.025 0.048" rotation="-90 0 0">
-        </a-entity>
-        <a-entity tooltip="text: Main menu; width: 0.07; height: 0.03; targetPosition: 0 -0.07 -0.062; lineHorizontalAlign: center; lineVerticalAlign: bottom; src: assets/images/tooltip.png" position="0 0.015 -0.05" rotation="-90 0 0">
-        </a-entity>
-        <a-entity tooltip="text: Press to paint\n(pressure sensitive); width: 0.11; height: 0.04; targetPosition: 0 -0.06 0.067; lineHorizontalAlign: right; src: assets/images/tooltip.png" position="-0.11 -0.055 0.04" rotation="-90 0 0">
-        </a-entity>
-        <a-entity tooltip="text: Undo; width: 0.06; height: 0.03; targetPosition: -0.003 0.046 0.106; src: assets/images/tooltip.png" position="0.1 -0.005 0.12" rotation="-90 0 0">
-        </a-entity>
-      </a-entity>
-      <a-entity class="oculus-tooltips" visible="false">
-        <a-entity tooltip="text: Main Menu; width: 0.07; height: 0.03; targetPosition: 0.009 0.0 -0.002; rotation: -90 0 0; lineHorizontalAlign: right; src: assets/images/tooltip.png" position="-0.066 0.013 0.013">
-        </a-entity>
-        <a-entity tooltip="text: Teleport; width: 0.06; height: 0.03; targetPosition: -0.008 0 -0.001; rotation: -90 0 0; lineHorizontalAlign: right; src: assets/images/tooltip.png" position="-0.059 0.015 -0.028">
-        </a-entity>
-        <a-entity tooltip="text: Brush size\n(slide up/down); width: 0.09; height: 0.04; targetPosition: 0.009 0.01 -0.01; lineHorizontalAlign: center; lineVerticalAlign: top; rotation: -90 0 0; src: assets/images/tooltip.png" position="0.07 0.01 0.06">
-        </a-entity>
-        <a-entity tooltip="text: Press to paint!\n(pressure sensitive); width: 0.11; height: 0.04; targetPosition: -0.002 -0.023 -0.02; lineHorizontalAlign: left; rotation: -90 0 0; src: assets/images/tooltip.png" position="0.09 0.020 -0.067">
-        </a-entity>
-        <a-entity tooltip="text: Undo; width: 0.05; height: 0.03; targetPosition: -0.005 -0.022 0.027; rotation: -90 0 0; lineHorizontalAlign: right; src: assets/images/tooltip.png" position="-0.058 -0.01 0.055">
-        </a-entity>
-      </a-entity>
-    </a-entity>
-    <a-entity id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:90" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
+    <!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="A-Frame Slideshow">
+    <link rel="apple-touch-icon" href="public/assets/icons/icon-128x128.png">
     
-    <!-- A-FRAME SCENE ENTITIES -->
+    <meta name="msapplication-TileImage" content="public/assets/icons/icon-128x128.png">
+    <meta name="msapplication-TileColor" content="#2F3BA2"> 
 
-    <a-entity id="camParent" position="0 0 0">
-      <a-entity id="acamera" camera look-controls-alt orbit-controls></a-entity>
-    </a-entity>
+    <script type="text/javascript" src="public/js/aframe-v0.5.0.min.js"></script>
+    <script type="text/javascript" src="public/js/script.js"></script>
 
-    <!-- 3D Model to showcase animation and gamepad API -->
-    <a-entity scale="0.2 0.2 0.2" position="-5.5 0.8 -3.6" animation-mixer="" json-model="src: public/assets/models/utopiah_danse.json;" 
-      gamepad-controls="lookEnabled: false;controller: 2;" rotation="" visible=""></a-entity>
-
-    <!-- slideshow content -->
-    <a-entity aframe-slideshow="folder:public/assets/slides/;nbslides:37;vidSlidesIndex:3,4,20,26,28;animSlidesIndex:20,21"></a-entity>
-  </a-scene>
-
-  <a href="https://aframe.io/a-painter/"><div id="apainter-logo" class="hidden"></div><div id="apainter-author" style="display:none" class="hidden">authorname</div></a>
-  <div id="apainter-ui">
-    <div class="progress hide">
-      Saving painting...
-      <div class="bar"></div>
+    <link rel="stylesheet" href="public/styles/main.css">
+  </head>
+  <body style="background-color: #030404">
+    <div id="loaderDiv" class="dialog-container make-container--visible">
+      <img class="loader" src="public/assets/icons/loader.gif" />
     </div>
-    <div class="share hide">
-      <div class="help">
-        <h1>Painting saved!</h1>
-        <p>Your painting was saved in the following URL.<br>You can use it to continue your work later or to share your masterpiece in social media.</p>
-      </div>
-      <div class="form">
-        <input id="apainter-share-url" type="text" value="" readonly />
-        <div id="copy-toclipboard" data-clipboard-target="#apainter-share-url" class="button copy">COPY URL</div>
-      </div>
-    </div>
-  </div>
-</body>
+
+    <a-scene>
+      <!-- A-FRAME SCENE ASSETS -->
+      <a-assets>
+        <img id="skymap" src="public/assets/images/sky.jpg" crossOrigin="anonymous">
+        <img id="floor" src="public/assets/images/floor.jpg" crossOrigin="anonymous">
+      </a-assets>
+
+      <!-- A-FRAME SCENE LIGHTS -->
+      <a-light type="point" light="color: #fff; intensity:0.6" position="3 10 1"></a-light>
+      <a-light type="point" light="color: #fff; intensity:0.2" position="-3 -10 0"></a-light>
+      <a-light type="hemisphere" groundColor="#888" intensity="0.8"></a-light>
+       
+      <!-- A-FRAME SCENE CAMERAS -->
+      <a-entity id="camParent" position="0 0 0">
+        <a-entity id="acamera" camera="user-height:1.6" look-controls-alt orbit-controls></a-entity>
+      </a-entity>
+
+
+      <!-- A-FRAME SCENE CONTROLS -->
+      <a-entity id="left-hand" vive-controls="hand: left" oculus-touch-controls="hand: left" teleport-controls="button: trackpad; ground: #ground; hitCylinderColor: #ff3468; curveHitColor: #ff3468; curveMissColor: #333333; curveLineWidth: 0.01;"></a-entity>
+      <a-entity id="right-hand" vive-controls="hand: right" oculus-touch-controls="hand: right" teleport-controls="button: trackpad; ground: #ground; hitCylinderColor: #ff3468; curveHitColor: #ff3468; curveMissColor: #333333; curveLineWidth: 0.01;"></a-entity>
+
+      <!-- A-FRAME SCENE ENTITIES -->
+
+      <a-entity id="ground" geometry="primitive: box; width: 12; height: 0.01; depth: 12" material="shader: flat; src: #floor"></a-entity>
+      <a-entity id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:90" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
+
+      <!-- slideshow content -->
+      <a-entity aframe-slideshow="nbslides:5;folder:public/assets/slides/;namingConv:Slide_%num%;vidSlidesIndex:3;animSlidesIndex:5"></a-entity>
+    </a-scene>
+  </body>
 </html>

@@ -3,14 +3,17 @@
 
   AFRAME.registerComponent('aframe-slideshow', {
     schema: {
-      transitionHeight  : {type: 'number', default: '2'},
-      folder            : {type: 'string', default: 'public/assets/slides/'},
-      nbslides          : {type: 'number', default: '0'},
-      stepTransition    : {type: 'number', default: '0.01'},
-      startpos          : {type: 'vec3',   default: undefined},
-      distBetweenSlides : {type: 'number', default: '5'},
-      nbColumns         : {type: 'number', default: '5'},
-      slideYPos         : {type: 'number', default: '1.6'}
+      transitionHeight  : {type: 'number', default: '2'},//Height of the animated curve between two slides
+      stepTransition    : {type: 'number', default: '0.01'},//speed of the animated transition 
+      folder            : {type: 'string', default: 'public/assets/slides/'},//Folder of the slides assets
+      namingConv        : {type: 'string', default: 'Slide_%num%'},//Naming convention of the slides where %num% represent slide number
+      imageExtension    : {type: 'string', default: 'jpg'},//extension for image assets
+      videoExtension    : {type: 'string', default: 'mp4'},//extension for video assets
+      nbslides          : {type: 'number', default: '0'},//total number of slides
+      startpos          : {type: 'vec3',   default: undefined},//Default position for the first slides
+      distBetweenSlides : {type: 'number', default: '5'},//Distance between two slides
+      nbColumns         : {type: 'number', default: '5'},//Number of columns for display arrangement
+      slideYPos         : {type: 'number', default: '1.6'}//Y position of the slides
     },
     /**
      * Set if component needs multiple instancing.
@@ -21,10 +24,26 @@
      * @return {[type]} [description]
      */
     init: function () {
-      var that                = this;
+      var that            = this;
+      this.hasBeenUpdated = false;
       // console.log("[AFRAME-Slideshow Component] Component initialized");
-      this.nbChildren         = parseInt(this.data.nbslides);
+      this.initVariables();
+
+      if(!document.querySelector("a-assets")){
+        let assets = document.createElement("a-assets");
+        document.querySelector("a-scene").appendChild(assets);
+      }
+
+      this.addListeners();
+      this.initSlides();
+    },
+    /**
+     * Init the variables from the component properties
+     * @return {[type]} [description]
+     */
+    initVariables : function(){
       this.registeredChildren = 0;
+      this.nbChildren         = parseInt(this.data.nbslides, 10);
       this.currentIndex       = 0;
 
       if(this.data.startpos){
@@ -43,24 +62,35 @@
       this.transitionHeight   = this.data.transitionHeight;
       this.deltaTransition    = 1;
       this.stepTransition     = this.data.stepTransition;
-
-      if(!document.querySelector("a-assets")){
-        let assets = document.createElement("a-assets");
-        document.querySelector("a-scene").appendChild(assets);
+    },
+    /**
+     * Handle updates on the component data 
+     * Called when component is attached and when component data changes.
+     * Generally modifies the entity based on the data.
+     * @return {[type]} [description]
+     */
+    update: function () {
+      if(!this.hasBeenUpdated){
+        //Skip update on initialization
+        this.hasBeenUpdated = true;
+        return;
       }
 
-      this.addListeners();
-      this.initSlides();
+      //TODO: Update slides accordingly to changes made
     },
+    /**
+     * Add Keyboard and Oculus Touch listeners to handle slide changes
+     * Also add listener on resize to adapt camera position toward slides to fit screen
+     */
     addListeners: function(){
       var that = this;
       document.addEventListener("keydown", function(event) {
         let catched = false;
-        if(event.keyCode === 39){
+        if(event.keyCode === 39){//Right Arrow
           that.nextSlide();
           catched = true;
         }
-        else if(event.keyCode === 37){
+        else if(event.keyCode === 37){//Left Arrow
           that.prevSlide();
           catched = true;
         }
@@ -71,35 +101,31 @@
         }
       });
 
-      window.addEventListener("resize", () => {this.goToSlide(this.currentIndex, true);});
+      function handleController(event){
+        if(document.querySelector("a-scene").is('vr-mode')){
+          return;
+        }
+        if(event.detail.id === 1){//Trigger pressed
+          that.nextSlide();
+        }
+        else if(event.detail.id === 2){//Bumper pressed
+          that.prevSlide();
+        }
+      }
 
+      //Oculus controllers handling
+      //TODO: make a general handling for all controllers
       if(document.querySelector("#right-hand")){
-        document.querySelector("#right-hand").addEventListener("buttondown", (event) => {
-          if(document.querySelector("a-scene").is('vr-mode')){
-            return;
-          }
-          if(event.detail.id === 1){
-            that.nextSlide();
-          }
-          else if(event.detail.id === 2){
-            that.prevSlide();
-          }
-        });
+        document.querySelector("#right-hand").addEventListener("buttondown", handleController);
       }
       if(document.querySelector("#left-hand")){
-        document.querySelector("#left-hand").addEventListener("buttondown", (event) => {
-          if(document.querySelector("a-scene").is('vr-mode')){
-            return;
-          }
-          if(event.detail.id === 1){
-            that.nextSlide();
-          }
-          else if(event.detail.id === 2){
-            that.prevSlide();
-          }
-        });
+        document.querySelector("#left-hand").addEventListener("buttondown", handleController);
       }
 
+      //Handles screen resizing
+      window.addEventListener("resize", () => {this.goToSlide(this.currentIndex, true);});
+
+      //Handles entering/exiting VR mode to replace the camera to the correct position
       document.querySelector('a-scene').addEventListener('exit-vr', function () {
         document.querySelector("#camParent").object3D.position.copy(that.oldCamParentPos);
       })
@@ -108,39 +134,56 @@
         document.querySelector("#camParent").object3D.position.set(0, 0, 0);
       })
     },
+    /**
+     * Create the 'aframe-slideshow-slide' components inside the slideshow, based on its properties
+     * @return {[type]} [description]
+     */
     initSlides: function(){
-      var slidesVideo = this.data.vidSlidesIndex.split(",").map(function(obj){ return parseInt(obj, 10);});
-      var slidesAnimated = this.data.animSlidesIndex.split(",").map(function(obj){ return parseInt(obj, 10);});
-      // to be generated fom the list of slides
+      //Transforming component data into arrays for video and animated slides index
+      let slidesVideo    = this.data.vidSlidesIndex.split(",").map(function(obj){ return parseInt(obj, 10);});
+      let slidesAnimated = this.data.animSlidesIndex.split(",").map(function(obj){ return parseInt(obj, 10);});
+
       for(let i = 1, len = this.data.nbslides; i <= len; ++i){
-        var entity = document.createElement("a-entity");
+        let entity = document.createElement("a-entity");
         entity.id = "slide"+i;
         let animate = "";
         if (slidesAnimated.indexOf(i) !== -1){
           animate = "animTransition: true;";
         }
+
         if (slidesVideo.indexOf(i) !== -1){
-          entity.setAttribute("aframe-slideshow-slide", "src: "+this.data.folder+"Slide_("+i+").mp4; type: video;" + animate);
+          //Creating a video slide
+          entity.setAttribute("aframe-slideshow-slide", "src: "+this.data.folder+this.data.namingConv.replace("%num%", i)+"."+this.data.videoExtension+"; type: video;" + animate);
         }
         else{
-          entity.setAttribute("aframe-slideshow-slide", "src: "+this.data.folder+"Slide_("+i+").png; type: image;" + animate);
+          //Creating an image slide
+          entity.setAttribute("aframe-slideshow-slide", "src: "+this.data.folder+this.data.namingConv.replace("%num%", i)+"."+this.data.imageExtension+"; type: image;" + animate);
         }
         this.el.appendChild(entity);
       }
     },
+    /**
+     * Add slide-child entity to slideshow and set its position in space (rows and columns formation)
+     * Check when all slides are ready
+     * @param {[type]} child [description]
+     */
     addChild: function(child){
-      let index = Array.from(this.el.children).indexOf(child.el);
-      let vec = new THREE.Vector3();
-      vec.x = (index % this.data.nbColumns);
-      vec.z = -Math.floor(index / this.data.nbColumns);
+      let index = Array.from(this.el.children).indexOf(child);
+      let vec   = new THREE.Vector3();
+      vec.x     = (index % this.data.nbColumns);
+      vec.z     = -Math.floor(index / this.data.nbColumns);
       vec.multiplyScalar(this.data.distBetweenSlides).add(this.startpos);
-      vec.y = this.data.slideYPos;
-      child.el.setAttribute('position', vec);
+      vec.y     = this.data.slideYPos;
+      child.setAttribute('position', vec);
 
       if(++this.registeredChildren >= this.nbChildren){
         this.onSlideshowReady();
       }
     },
+    /**
+     * Triggered when all slides are ready, put the camera in front of the first slide or the one pinned in the URL
+     * @return {[type]} [description]
+     */
     onSlideshowReady : function(){
       document.getElementById("loaderDiv").classList.remove('make-container--visible');
 
@@ -159,16 +202,30 @@
         this.goToSlide(this.currentIndex, true);
       }
     },
+    /**
+     * Go to the next slide (go back to first slide after the last one)
+     * @return {[type]} [description]
+     */
     nextSlide : function(){
       let nextIndex = (this.currentIndex + 1) % this.registeredChildren;
       this.goToSlide(nextIndex);
       this.currentIndex = nextIndex;
     },
+    /**
+     * Go to previous slide (sticks to first)
+     * @return {[type]} [description]
+     */
     prevSlide : function(){
       let nextIndex = Math.max(this.currentIndex - 1, 0);
       this.goToSlide(nextIndex);
       this.currentIndex = nextIndex;
     },
+    /**
+     * Move the camera to slide X, put the camera to the right place (slide width fitting the screen)
+     * @param  {int} index         slide Index
+     * @param  {boolean} skipAnimation prevent animating between slide (for first init)
+     * @return {[type]}               [description]
+     */
     goToSlide : function(index, skipAnimation){
       let slideChild = this.el.children[index];
       if(!slideChild){
@@ -181,11 +238,7 @@
         geomSize     = document.querySelector("#" + slideChild.id).components["aframe-slideshow-slide"].geomWidth,
         camFov       = camera.fov,
         canvasRatio  = renderer.getSize().width / renderer.getSize().height;
-      // if(canvasRatio > 1.9){
-      //   //Trick for fullscreen
-      //   canvasRatio = 1;
-      //   geomSize    = document.querySelector("#" + slideChild.id).components["aframe-slideshow-slide"].geomHeight;
-      // }
+
       let posZ         = ((geomSize) / 2)/(Math.tan((camFov * Math.PI / 180) / 2)) / canvasRatio;
 
       let newPos = new THREE.Vector3(slideChild.object3D.position.x, 0, slideChild.object3D.position.z + posZ);
@@ -202,15 +255,7 @@
       }
     },
     /**
-     * Handle updates on the component data 
-     * Called when component is attached and when component data changes.
-     * Generally modifies the entity based on the data.
-     * @return {[type]} [description]
-     */
-    update: function () {
-    },
-    /**
-     * Handles component, called on each animation frame
+     * Handles slide animation transition from X-1 to X following the assigned curve
      * @param  {float} time      global scene uptime
      * @param  {float} timeDelta time since the last frame
      * @return {[type]}           [description]

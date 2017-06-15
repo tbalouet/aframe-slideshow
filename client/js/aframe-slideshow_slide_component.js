@@ -19,6 +19,7 @@
       this.assetId = this.data.type + "_" + this.el.id;
 
       let assetFile;
+      //Check component type and create appropriate asset
       if(this.data.type === "image"){
         assetFile = document.createElement("img");
         assetFile.setAttribute("id", this.assetId);
@@ -41,9 +42,12 @@
       }
 
     },
+    /**
+     * Create an a-box component containing the entity asset
+     */
     createBox : function(){
       let asset       = document.getElementById(this.assetId);
-      this.width      = (asset.width || 1024), this.height = (asset.height || 512);
+      this.width      = 1024, this.height = 512;
       this.geomHeight = 2;
       this.geomWidth  = this.geomHeight * (this.width/this.height);
 
@@ -54,7 +58,7 @@
       box.setAttribute("width", this.geomWidth);
       this.el.appendChild(box);
 
-      this.el.parentEl.components['aframe-slideshow'].addChild(this);
+      this.el.parentEl.components['aframe-slideshow'].addChild(this.el);
     },
     /**
      * Handle updates on the component data 

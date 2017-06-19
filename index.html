@@ -1,67 +1,159 @@
 <html>
-  <head>
+
+<head>
     <title>A-Frame Slide Show Component</title>
     <meta name="description" content="A component to present slide shows inside an A-Frame scene"></meta>
+    <link rel="stylesheet" type="text/css" href="https://assets-cdn.github.com/assets/frameworks-722d5e7b1dad7337873eb9e5df225130f9619c70d109a26aebf344b98cbff091.css">
+    <link rel="stylesheet" type="text/css" href="https://assets-cdn.github.com/assets/github-c70ee366b0ffb80be3cbbdce4f1d2006b3345d56c80838270a12e6a79960e663.css">
     <style>
-      html {
-        background: #33425B;
-        color: #FAFAFA;
-        font-family: monospace;
-        font-size: 20px;
-        padding: 10px 20px;
-      }
-      h1 {
-        font-weight: 300;
-      }
-      a {
-        color: #FAFAFA;
-        display: block;
-        padding: 15px 0;
-      }
-      img {
-        max-width: 320px;
-      }
-      ul {
-        display: flex;
-        list-style: none;
-        flex-wrap: wrap;
-        padding: 5px 0 0;
-      }
-      ul li {
-        margin-right: 30px;
-        padding: 5px 0 30px;
-      }
-      ul a {
-        background-size: cover;
-        display: block;
-        padding: 0;
-        height: 320px;
-        width: 320px;
-      }
-      ul h3,
-      ul p {
-        max-width: 320px;
-      }
+    article {
+        margin:25px;
+    }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <h1>A-Frame Slide Show Component</h1>
+    <article class="markdown-body entry-content" itemprop="text">
+        <h2><a id="user-content-aframe-slideshow-component" class="anchor" href="#aframe-slideshow-component" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>aframe-slideshow-component</h2>
+        <p>
+            <a href="https://npmjs.org/package/aframe-slideshow-component"><img src="https://camo.githubusercontent.com/42002a9bbe9711746df691ce31fe863f08ccde0f/687474703a2f2f696d672e736869656c64732e696f2f6e706d2f762f616672616d652d736c69646573686f772d636f6d706f6e656e742e7376673f7374796c653d666c61742d737175617265" alt="Version" data-canonical-src="http://img.shields.io/npm/v/aframe-slideshow-component.svg?style=flat-square" style="max-width:100%;"></a>
+            <a href="https://npmjs.org/package/aframe-slideshow-component"><img src="https://camo.githubusercontent.com/a543478845b6d2b0a371d206a0522fc80b4f702e/687474703a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f616672616d652d736c69646573686f772d636f6d706f6e656e742e7376673f7374796c653d666c61742d737175617265" alt="License" data-canonical-src="http://img.shields.io/npm/l/aframe-slideshow-component.svg?style=flat-square" style="max-width:100%;"></a>
+        </p>
+        <p>A component to present slide shows inside an A-Frame scene</p>
+        <p>The point is to allow you to embed your slides inside a WebVR demo done with A-Frame, to simplify presentations and directly showcase features to your users.</p>
+        <p>This was used during the DevFestLille June 2017 by Thomas Balouet (@thomasbalou) and Fabien Benetou (@utopiah). We demonstrated use of 3D Web (by the existence of the Slideshow in 3D itself), as well as the Gamepad API, and the A-Painter project allowing us to draw over the slides in VR. The component's work is to fetch images and videos in a repository, display them in the 3D space as planes and enable the user to navigate through them.</p>
+        <p>
+            <a href="https://camo.githubusercontent.com/bea4b7efc13d67ab310d4bbe27698dd32a6c7c0a/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f444234304e424157304149677856422e6a70673a6c61726765" target="_blank"><img src="https://camo.githubusercontent.com/bea4b7efc13d67ab310d4bbe27698dd32a6c7c0a/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f444234304e424157304149677856422e6a70673a6c61726765" alt="Thomas drawing over the slides" data-canonical-src="https://pbs.twimg.com/media/DB40NBAW0AIgxVB.jpg:large" style="max-width:100%;"></a>
+        </p>
+        <p><a href="https://aframe-slides.firebaseapp.com">Link to the A-Frame presentation made at Devfest Lille 2017</a></p>
+        <p><a href="https://tbalouet.github.io/aframe-slideshow/examples/basic">Live demo of the component</a></p>
+        <p>For <a href="https://aframe.io">A-Frame</a>.</p>
+        <h3><a id="user-content-api" class="anchor" href="#api" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>API</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Description</th>
+                    <th>Default Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>transitionHeight</td>
+                    <td>Height of the animated curve between two slides</td>
+                    <td>'2'</td>
+                </tr>
+                <tr>
+                    <td>stepTransition</td>
+                    <td>Speed of the animated transition</td>
+                    <td>'0.01'</td>
+                </tr>
+                <tr>
+                    <td>folder</td>
+                    <td>Folder of the slides assets (relative path or absolute for ext. hosting)</td>
+                    <td>'public/assets/slides/'</td>
+                </tr>
+                <tr>
+                    <td>namingConv</td>
+                    <td>Naming convention of the slides where %num% represent slide number</td>
+                    <td>'Slide_%num%'</td>
+                </tr>
+                <tr>
+                    <td>imageExtension</td>
+                    <td>File extension for image assets</td>
+                    <td>'jpg'</td>
+                </tr>
+                <tr>
+                    <td>videoExtension</td>
+                    <td>File extension for video assets</td>
+                    <td>'mp4'</td>
+                </tr>
+                <tr>
+                    <td>nbslides</td>
+                    <td>Total number of slides</td>
+                    <td>'0'</td>
+                </tr>
+                <tr>
+                    <td>startpos</td>
+                    <td>Default position for the first slides</td>
+                    <td>undefined</td>
+                </tr>
+                <tr>
+                    <td>distBetweenSlides</td>
+                    <td>Distance between two slides</td>
+                    <td>'5'</td>
+                </tr>
+                <tr>
+                    <td>nbColumns</td>
+                    <td>Number of columns for display arrangement</td>
+                    <td>'5'</td>
+                </tr>
+                <tr>
+                    <td>slideYPos</td>
+                    <td>Y position of the slides</td>
+                    <td>'1.6'</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3><a id="user-content-installation" class="anchor" href="#installation" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Installation</h3>
+        <h4><a id="user-content-browser" class="anchor" href="#browser" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Browser</h4>
+        <p>Install and use by directly including the <a href="/tbalouet/aframe-slideshow/blob/trunk/dist">browser files</a>:</p>
+        <div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">head</span>&gt;
+  &lt;<span class="pl-ent">title</span>&gt;My A-Frame Scene&lt;/<span class="pl-ent">title</span>&gt;
+  &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>https://aframe.io/releases/0.5.0/aframe.min.js<span class="pl-pds">"</span></span>&gt;<span class="pl-s1">&lt;</span>/<span class="pl-ent">script</span>&gt;
+  &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>https://unpkg.com/aframe-slideshow-component/dist/aframe-slideshow-component.min.js<span class="pl-pds">"</span></span>&gt;<span class="pl-s1">&lt;</span>/<span class="pl-ent">script</span>&gt;
+&lt;/<span class="pl-ent">head</span>&gt;
 
-    <ul>
-      <li>
-        <a href="examples/basic/" style="background-image: url(screenshot.jpg)"></a>
-        <h3>Basic</h3>
-        <p>This is a basic example.</p>
-      </li>
-    </ul>
-
+&lt;<span class="pl-ent">body</span>&gt;
+  &lt;<span class="pl-ent">a-scene</span>&gt;
+    &lt;<span class="pl-ent">a-entity</span> <span class="pl-e">aframe-slideshow</span>=<span class="pl-s"><span class="pl-pds">"</span>nbslides:5;folder:public/assets/slides/;namingConv:Slide_%num%;vidSlidesIndex:3;animSlidesIndex:5<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">a-entity</span>&gt;
+  &lt;/<span class="pl-ent">a-scene</span>&gt;
+&lt;/<span class="pl-ent">body</span>&gt;</pre></div>
+        <h4><a id="user-content-npm" class="anchor" href="#npm" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>npm</h4>
+        <p>Install via npm:</p>
+        <div class="highlight highlight-source-shell"><pre>npm install aframe-slideshow-component</pre></div>
+        <p>Then require and use.</p>
+        <div class="highlight highlight-source-js"><pre><span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>aframe<span class="pl-pds">'</span></span>);
+<span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>aframe-slideshow-component<span class="pl-pds">'</span></span>);</pre></div>
+    </article>
     <!-- GitHub Corner. -->
     <a href="https://github.com/tbalouet/aframe-slideshow" class="github-corner">
-      <svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;">
-        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
-      </svg>
+        <svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;">
+            <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+            <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+            <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+        </svg>
     </a>
-    <style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+    <style>
+    .github-corner:hover .octo-arm {
+        animation: octocat-wave 560ms ease-in-out
+    }
+    
+    @keyframes octocat-wave {
+        0%,
+        100% {
+            transform: rotate(0)
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg)
+        }
+        40%,
+        80% {
+            transform: rotate(10deg)
+        }
+    }
+    
+    @media (max-width:500px) {
+        .github-corner:hover .octo-arm {
+            animation: none
+        }
+        .github-corner .octo-arm {
+            animation: octocat-wave 560ms ease-in-out
+        }
+    }
     </style>
-  </body>
+</body>
+
 </html>

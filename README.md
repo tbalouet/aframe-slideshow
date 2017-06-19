@@ -5,6 +5,8 @@
 
 A component to present slide shows inside an A-Frame scene
 
+![Using the Slideshow component to browse through slides, using keyboard and oculus controller](http://i.imgur.com/p1FN59Q.gif)
+
 The point is to allow you to embed your slides inside a WebVR demo done with A-Frame, to simplify presentations and directly showcase 
 features to your users.
 
@@ -82,3 +84,11 @@ Then require and use.
 require('aframe');
 require('aframe-slideshow-component');
 ```
+
+### Next steps
+
+If the component interest people, here are the main next steps to implement
+- Add more controller to browse the slides (Daydream/Gear VR controller, Vive ones)
+- Allow "public view" for the audience to access the Web app with special controls (probably mobile) and live browsing
+- Add audience interaction (clicking on a slide would make 3D models pop up for example)
+- Any other idea? Please add an [issue](https://github.com/tbalouet/aframe-slideshow/issues)!

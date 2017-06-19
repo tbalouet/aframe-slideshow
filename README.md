@@ -5,6 +5,8 @@
 
 A component to present slide shows inside an A-Frame scene
 
+![Using the Slideshow component to browse through slides, using keyboard and oculus controller](https://im.ezgif.com/tmp/ezgif-1-b906be435e.gif)
+
 The point is to allow you to embed your slides inside a WebVR demo done with A-Frame, to simplify presentations and directly showcase 
 features to your users.
 
@@ -35,7 +37,15 @@ For [A-Frame](https://aframe.io).
 |distBetweenSlides|Distance between two slides                                               |'5'                    |
 |nbColumns        |Number of columns for display arrangement                                 |'5'                    |
 |slideYPos        |Y position of the slides                                                  |'1.6'                  |
+|vidSlidesIndex   |Array of indexes of video slides                                          |[]                     |
+|animSlidesIndex  |Array of indexes of slides with animated transition                       |[]                     |
 
+### Features
+
+- Add video or image slides (need to list video indexes in 'vidSlidesIndex' array)
+- Pin access to direct slide [example](https://tbalouet.github.io/aframe-slideshow/examples/basic/#p3)
+- Navigate through slides with left/right arrows or Oculus Touch triggers
+- Add animation between transition (need to list animated slides indexes in 'animSlidesIndex' array and set curve height in 'transitionHeight')
 
 ### Installation
 

@@ -12,7 +12,6 @@ features to your users.
 
 This was used during the DevFestLille June 2017 by Thomas Balouet (@thomasbalou) and Fabien Benetou (@utopiah). We demonstrated use of 3D Web
 (by the existence of the Slideshow in 3D itself), as well as the Gamepad API, and the A-Painter project allowing us to draw over the slides in VR.
-The component's work is to fetch images and videos in a repository, display them in the 3D space as planes and enable the user to navigate through them.
 
 ![Thomas drawing over the slides](https://pbs.twimg.com/media/DB40NBAW0AIgxVB.jpg:large)
 
@@ -21,6 +20,17 @@ The component's work is to fetch images and videos in a repository, display them
 [Live demo of the component](https://tbalouet.github.io/aframe-slideshow/examples/basic)
 
 For [A-Frame](https://aframe.io).
+
+### Features
+
+The component fetch slides from a folder (local or online). For the moment only videos and images are allowed. Slides are displayed in your 3D environment
+and the component allow you to navigate from one slide to the other.
+
+Actual features are:
+- Add video or image slides (need to list video indexes in 'vidSlidesIndex' array)
+- Pin access to direct slide [example](https://tbalouet.github.io/aframe-slideshow/examples/basic/#p3)
+- Navigate through slides with left/right arrows or Oculus Touch triggers
+- Add animation between transition (need to list animated slides indexes in 'animSlidesIndex' array and set curve height in 'transitionHeight')
 
 ### API
 
@@ -39,13 +49,6 @@ For [A-Frame](https://aframe.io).
 |slideYPos        |Y position of the slides                                                  |'1.6'                  |
 |vidSlidesIndex   |Array of indexes of video slides                                          |[]                     |
 |animSlidesIndex  |Array of indexes of slides with animated transition                       |[]                     |
-
-### Features
-
-- Add video or image slides (need to list video indexes in 'vidSlidesIndex' array)
-- Pin access to direct slide [example](https://tbalouet.github.io/aframe-slideshow/examples/basic/#p3)
-- Navigate through slides with left/right arrows or Oculus Touch triggers
-- Add animation between transition (need to list animated slides indexes in 'animSlidesIndex' array and set curve height in 'transitionHeight')
 
 ### Installation
 

@@ -5,8 +5,6 @@
 
 A component to present slide shows inside an A-Frame scene
 
-![Using the Slideshow component to browse through slides, using keyboard and oculus controller](http://i.imgur.com/p1FN59Q.gif)
-
 The point is to allow you to embed your slides inside a WebVR demo done with A-Frame, to simplify presentations and directly showcase 
 features to your users.
 

@@ -14,26 +14,27 @@ The component's work is to fetch images and videos in a repository, display them
 
 ![Thomas drawing over the slides](https://pbs.twimg.com/media/DB40NBAW0AIgxVB.jpg:large)
 
-[Link to the A-Frame presentation made at GDG Lille](https://aframe-slides.firebaseapp.com)
+[Link to the A-Frame presentation made at Devfest Lille 2017](https://aframe-slides.firebaseapp.com)  
+
 [Live demo of the component](https://tbalouet.github.io/aframe-slideshow/examples/basic)
 
 For [A-Frame](https://aframe.io).
 
 ### API
 
-| Property        | Description                                                      | Default Value         |
-| --------        | -----------                                                      | -------------         |
-|transitionHeight |Height of the animated curve between two slides                   |'2'                    |
-|stepTransition   |Speed of the animated transition                                  |'0.01'                 |
-|folder           |Folder of the slides assets                                       |'public/assets/slides/'|
-|namingConv       |Naming convention of the slides where %num% represent slide number|'Slide_%num%'          |
-|imageExtension   |File extension for image assets                                   |'jpg'                  |
-|videoExtension   |File extension for video assets                                   |'mp4'                  |
-|nbslides         |Total number of slides                                            |'0'                    |
-|startpos         |Default position for the first slides                             |undefined              |
-|distBetweenSlides|Distance between two slides                                       |'5'                    |
-|nbColumns        |Number of columns for display arrangement                         |'5'                    |
-|slideYPos        |Y position of the slides                                          |'1.6'                  |
+| Property        | Description                                                              | Default Value         |
+| --------        | -----------                                                              | -------------         |
+|transitionHeight |Height of the animated curve between two slides                           |'2'                    |
+|stepTransition   |Speed of the animated transition                                          |'0.01'                 |
+|folder           |Folder of the slides assets (relative path or absolute for ext. hosting)  |'public/assets/slides/'|
+|namingConv       |Naming convention of the slides where %num% represent slide number        |'Slide_%num%'          |
+|imageExtension   |File extension for image assets                                           |'jpg'                  |
+|videoExtension   |File extension for video assets                                           |'mp4'                  |
+|nbslides         |Total number of slides                                                    |'0'                    |
+|startpos         |Default position for the first slides                                     |undefined              |
+|distBetweenSlides|Distance between two slides                                               |'5'                    |
+|nbColumns        |Number of columns for display arrangement                                 |'5'                    |
+|slideYPos        |Y position of the slides                                                  |'1.6'                  |
 
 
 ### Installation

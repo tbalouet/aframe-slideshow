@@ -64,7 +64,14 @@ Install and use by directly including the [browser files](dist):
 </head>
 
 <body>
-  <a-scene>
+  <div id="loaderDiv">Loading slides...</div>  
+  
+  <a-scene>  
+    <!-- A-FRAME SCENE CAMERAS -->
+    <a-entity id="camParent" position="0 0 0">
+      <a-entity id="acamera" camera="user-height:1.6" look-controls></a-entity>
+    </a-entity>
+  
     <a-entity aframe-slideshow="nbslides:5;folder:public/assets/slides/;namingConv:Slide_%num%;vidSlidesIndex:3;animSlidesIndex:5"></a-entity>
   </a-scene>
 </body>
